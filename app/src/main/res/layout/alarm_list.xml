@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
+
+
+    <TextView
+        android:id="@+id/alarm_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp"
+        android:text="07:55"
+        android:textColor="#000000"
+        android:textSize="16sp"/>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#b4b4b4"
+        android:layout_toRightOf="@id/alarm_time"/>
+
+
+    <TextView
+        android:id="@+id/alarm_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:text="周一至周五"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_toRightOf="@id/line"/>
+
+    <Switch
+        android:id="@+id/alarm_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"/>
+
+</RelativeLayout>
