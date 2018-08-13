@@ -14,6 +14,10 @@ public class SetAlarmItem {
         this.imageId = imageId;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getTitle() {
         return title;
     }
