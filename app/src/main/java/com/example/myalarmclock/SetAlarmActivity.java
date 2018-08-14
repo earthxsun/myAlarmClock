@@ -30,7 +30,7 @@ public class SetAlarmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_alarm);
         initSetAlarmItems();
-        SetAlarmAdapter alarmAdapter = new SetAlarmAdapter(SetAlarmActivity.this, R.layout.setalarm_item, mSetAlarmItems);
+        final SetAlarmAdapter alarmAdapter = new SetAlarmAdapter(SetAlarmActivity.this, R.layout.setalarm_item, mSetAlarmItems);
         ListView listView = findViewById(R.id.set_alarm_listview);
         listView.setAdapter(alarmAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -40,7 +40,7 @@ public class SetAlarmActivity extends AppCompatActivity {
                 SetAlarmItem alarmItem = mSetAlarmItems.get(position);
                 //创建AlertDialog对话框
                 AlertDialog.Builder builder = new AlertDialog.Builder(SetAlarmActivity.this);
-                SetAlarmTools setAlarmTools = new SetAlarmTools(SetAlarmActivity.this,builder);
+                SetAlarmTools setAlarmTools = new SetAlarmTools(SetAlarmActivity.this,builder, mSetAlarmItems,alarmAdapter,position);
 
 
                 //根据设置项的名称来判断
