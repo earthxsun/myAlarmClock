@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,7 +131,7 @@ public class SetAlarmTools {
     //创建自定义日期对话框
     private AlertDialog.Builder customDateDialog(Context context) {
         final String[] items = new String[]{"周日", "周一", "周二", "周三", "周四", "周五", "周六"};
-        final boolean[] isSelected = {false,false,false,false,false,false,false};
+        final boolean[] isSelected = {false, false, false, false, false, false, false};
         TextView textView = new TextView(context);
         textView.setText("自定义");
         textView.setGravity(Gravity.CENTER);
@@ -143,22 +142,21 @@ public class SetAlarmTools {
         builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                isSelected[which]=isChecked;
+                isSelected[which] = isChecked;
             }
         });
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 StringBuilder stringBuilder = new StringBuilder();
-                for (int i = 0;i<isSelected.length;i++){
-                    if (isSelected[i]){
+                for (int i = 0; i < isSelected.length; i++) {
+                    if (isSelected[i]) {
                         stringBuilder.append(items[i]);
                         stringBuilder.append(" ");
                     }
                 }
                 mSetAlarmItems.get(mPosition).setContent(stringBuilder.toString());
                 mSetAlarmAdapter.notifyDataSetChanged();
-                Log.d("mytest",stringBuilder.toString());
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
