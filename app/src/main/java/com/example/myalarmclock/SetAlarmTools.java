@@ -139,9 +139,11 @@ public class SetAlarmTools {
         textView.setBackgroundResource(R.drawable.input_style);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCustomTitle(textView);
+        //设置多选
         builder.setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                //根据点击选项把值付给isSelected数组
                 isSelected[which] = isChecked;
             }
         });
@@ -149,13 +151,22 @@ public class SetAlarmTools {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 StringBuilder stringBuilder = new StringBuilder();
+                //根据数据isSelected来判断选项是否被选上
                 for (int i = 0; i < isSelected.length; i++) {
                     if (isSelected[i]) {
                         stringBuilder.append(items[i]);
                         stringBuilder.append(" ");
                     }
                 }
-                mSetAlarmItems.get(mPosition).setContent(stringBuilder.toString());
+                String alarmRepeat = stringBuilder.toString();
+                if(alarmRepeat.equals("周一 周二 周三 周四 周五 ")){
+                    alarmRepeat = "周一到周五";
+                }
+
+                if(alarmRepeat.equals("周日 周一 周二 周三 周四 周五 周六 ")){
+                    alarmRepeat = "每天";
+                }
+                mSetAlarmItems.get(mPosition).setContent(alarmRepeat);
                 mSetAlarmAdapter.notifyDataSetChanged();
             }
         });
@@ -175,6 +186,4 @@ public class SetAlarmTools {
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "设置闹钟铃声");
         mActivity.startActivityForResult(intent, 1);
     }
-
-
 }

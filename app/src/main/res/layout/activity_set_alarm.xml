@@ -10,6 +10,7 @@
         android:layout_height="?attr/actionBarSize">
 
         <Button
+            android:id="@+id/cancel_set_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -28,6 +29,7 @@
             android:text="新建闹钟"/>
 
         <Button
+            android:id="@+id/save_set_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
