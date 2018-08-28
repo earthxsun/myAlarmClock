@@ -14,6 +14,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.myalarmclock.Db.Alarm;
+
 import java.util.List;
 
 public class SetAlarmTools {
@@ -26,15 +28,17 @@ public class SetAlarmTools {
     private List<SetAlarmItem> mSetAlarmItems;
     private SetAlarmAdapter mSetAlarmAdapter;
     private int mPosition;
+    private Alarm mAlarm;
 
 
     public SetAlarmTools(Context context, AlertDialog.Builder builder, List<SetAlarmItem> setAlarmitems,
-                         SetAlarmAdapter setAlarmAdapter, int position) {
+                         SetAlarmAdapter setAlarmAdapter, Alarm alarm, int position) {
         mContext = context;
         mBuilder = builder;
         mSetAlarmItems = setAlarmitems;
         mSetAlarmAdapter = setAlarmAdapter;
         mPosition = position;
+        mAlarm = alarm;
     }
 
     //设置闹钟名称
@@ -46,6 +50,7 @@ public class SetAlarmTools {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        mAlarm.setTitle(editText.getText().toString());
                         mSetAlarmItems.get(mPosition).setContent(editText.getText().toString());
                         mSetAlarmAdapter.notifyDataSetChanged();
                     }
@@ -72,6 +77,9 @@ public class SetAlarmTools {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String alarmDate = datePicker.getYear() + "年" + (datePicker.getMonth() + 1) + "月" + datePicker.getDayOfMonth() + "日";
+                        mAlarm.setYear(datePicker.getYear());
+                        mAlarm.setMonth(datePicker.getMonth());
+                        mAlarm.setDay(datePicker.getDayOfMonth());
                         mSetAlarmItems.get(mPosition).setContent(alarmDate);
                         mSetAlarmAdapter.notifyDataSetChanged();
                     }
@@ -89,7 +97,7 @@ public class SetAlarmTools {
 
     //设置闹钟重复响铃
     public void setAlarmRepeat() {
-        final String[] items = new String[]{"单次", "周一到周五", "法定工作日", "每天", "自定义"};
+//        final String[] items = new String[]{"单次", "周一到周五", "法定工作日", "每天", "自定义"};
         //设置标题样式
         TextView title = new TextView(mContext);
         title.setText("重复");
@@ -98,16 +106,33 @@ public class SetAlarmTools {
         title.setTextSize(30);
         title.setBackgroundResource(R.drawable.input_style);
 
-        mBuilder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+        mBuilder.setSingleChoiceItems(InitData.items, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mDialog.dismiss();
                 switch (which) {
                     case 0:
+                        mAlarm.setOnce(true);
+                        mSetAlarmItems.get(mPosition).setContent(InitData.items[which]);
+                        mSetAlarmAdapter.notifyDataSetChanged();
+                        break;
                     case 1:
+                        mAlarm.setMonday(true);
+                        mAlarm.setTuesday(true);
+                        mAlarm.setWednesday(true);
+                        mAlarm.setThursday(true);
+                        mAlarm.setFriday(true);
+                        mSetAlarmItems.get(mPosition).setContent(InitData.items[which]);
+                        mSetAlarmAdapter.notifyDataSetChanged();
+                        break;
                     case 2:
+                        mAlarm.setStatutoryholiday(true);
+                        mSetAlarmItems.get(mPosition).setContent(InitData.items[which]);
+                        mSetAlarmAdapter.notifyDataSetChanged();
+                        break;
                     case 3:
-                        mSetAlarmItems.get(mPosition).setContent(items[which]);
+                        mAlarm.setEveryday(true);
+                        mSetAlarmItems.get(mPosition).setContent(InitData.items[which]);
                         mSetAlarmAdapter.notifyDataSetChanged();
                         break;
                     case 4:
@@ -166,6 +191,14 @@ public class SetAlarmTools {
                 if(alarmRepeat.equals("周日 周一 周二 周三 周四 周五 周六 ")){
                     alarmRepeat = "每天";
                 }
+                mAlarm.setSunday(isSelected[0]);
+                mAlarm.setMonday(isSelected[1]);
+                mAlarm.setTuesday(isSelected[2]);
+                mAlarm.setWednesday(isSelected[3]);
+                mAlarm.setThursday(isSelected[4]);
+                mAlarm.setFriday(isSelected[5]);
+                mAlarm.setSaturday(isSelected[6]);
+
                 mSetAlarmItems.get(mPosition).setContent(alarmRepeat);
                 mSetAlarmAdapter.notifyDataSetChanged();
             }

@@ -16,6 +16,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TimePicker;
 
+import com.example.myalarmclock.Db.Alarm;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +32,14 @@ public class SetAlarmActivity extends AppCompatActivity {
     private SetAlarmAdapter alarmAdapter;
     private Button saveButton;
     private TimePicker mTimePicker;
+    private Alarm mAlarm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_alarm);
+        Intent intent = getIntent();
+        mAlarm = (Alarm) intent.getSerializableExtra("alarm_db");
         initSetAlarmItems();
         alarmAdapter = new SetAlarmAdapter(SetAlarmActivity.this, R.layout.setalarm_item, mSetAlarmItems);
         ListView listView = findViewById(R.id.set_alarm_listview);
@@ -46,7 +51,7 @@ public class SetAlarmActivity extends AppCompatActivity {
                 SetAlarmItem alarmItem = mSetAlarmItems.get(position);
                 //创建AlertDialog对话框
                 AlertDialog.Builder builder = new AlertDialog.Builder(SetAlarmActivity.this);
-                SetAlarmTools setAlarmTools = new SetAlarmTools(SetAlarmActivity.this,builder, mSetAlarmItems,alarmAdapter,position);
+                SetAlarmTools setAlarmTools = new SetAlarmTools(SetAlarmActivity.this,builder, mSetAlarmItems,alarmAdapter,mAlarm,position);
 
 
                 //根据设置项的名称来判断
@@ -75,7 +80,11 @@ public class SetAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Build.VERSION.SDK_INT >= 23) {
-                    Log.d("mytest", "SetAlarmActivity:" + mTimePicker.getHour()+":"+mTimePicker.getMinute());
+                    mAlarm.setHour(mTimePicker.getHour());
+                    mAlarm.setMinute(mTimePicker.getMinute());
+                    mAlarm.setOpen(true);
+                    mAlarm.save();
+                    finish();
                 }
             }
         });
@@ -88,9 +97,11 @@ public class SetAlarmActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK && requestCode == 1){
             Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
             Ringtone ringTitle = RingtoneManager.getRingtone(SetAlarmActivity.this,uri);
-            mSetAlarmItems.get(3).setContent(ringTitle.getTitle(SetAlarmActivity.this));
+            String ringName = ringTitle.getTitle(SetAlarmActivity.this);
+            mSetAlarmItems.get(3).setContent(ringName);
+            mAlarm.setRingName(ringName);
+            mAlarm.setRingUri(uri.toString());
             alarmAdapter.notifyDataSetChanged();
-
         } else {
             Log.d("mytest","获取失败");
         }
@@ -107,10 +118,11 @@ public class SetAlarmActivity extends AppCompatActivity {
 
     //初始化闹钟设置选项
     private void initSetAlarmItems() {
-        SetAlarmItem item1 = new SetAlarmItem(itemName1, "自定义", R.drawable.arrow_right_gray);
-        SetAlarmItem item2 = new SetAlarmItem(itemName2, "自定义", R.drawable.arrow_right_gray);
-        SetAlarmItem item3 = new SetAlarmItem(itemName3, "自定义", R.drawable.arrow_right_gray);
-        SetAlarmItem item4 = new SetAlarmItem(itemName4, "自定义", R.drawable.arrow_right_gray);
+        String ringDate = mAlarm.getYear() + "年" + mAlarm.getMonth()+"月"+mAlarm.getDay()+"日";
+        SetAlarmItem item1 = new SetAlarmItem(itemName1, mAlarm.getTitle(), R.drawable.arrow_right_gray);
+        SetAlarmItem item2 = new SetAlarmItem(itemName2, ringDate, R.drawable.arrow_right_gray);
+        SetAlarmItem item3 = new SetAlarmItem(itemName3, "单次", R.drawable.arrow_right_gray);
+        SetAlarmItem item4 = new SetAlarmItem(itemName4, mAlarm.getRingName(), R.drawable.arrow_right_gray);
 
         mSetAlarmItems.add(item1);
         mSetAlarmItems.add(item2);

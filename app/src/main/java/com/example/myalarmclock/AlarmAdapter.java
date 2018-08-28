@@ -30,24 +30,32 @@ public class AlarmAdapter extends ArrayAdapter<AlarmItem> {
         if (convertView == null){
             view = LayoutInflater.from(getContext()).inflate(resourceId,parent,false);
             viewHolder = new ViewHolder();
+            viewHolder.alarmName = view.findViewById(R.id.alarm_name);
             viewHolder.alarmTime = view.findViewById(R.id.alarm_time);
             viewHolder.alarmDate = view.findViewById(R.id.alarm_date);
+            viewHolder.alarmRepeat = view.findViewById(R.id.alarm_repeat);
             viewHolder.alarmSwitch = view.findViewById(R.id.alarm_switch);
             view.setTag(viewHolder);
         } else {
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
         }
+        viewHolder.alarmName.setText(alarmItem.getAlarmName());
         viewHolder.alarmTime.setText(alarmItem.getAlarmtime());
         viewHolder.alarmDate.setText(alarmItem.getAlarmdate());
+        viewHolder.alarmRepeat.setText(alarmItem.getAlarmRepeat());
         viewHolder.alarmSwitch.setChecked(alarmItem.getOpen());
         return view;
     }
 
     private class ViewHolder {
+        TextView alarmName;
+
         TextView  alarmTime;
 
         TextView alarmDate;
+
+        TextView alarmRepeat;
 
         Switch alarmSwitch;
     }
