@@ -7,6 +7,8 @@ import java.util.Calendar;
 
 public class Alarm extends LitePalSupport implements Serializable {
 
+    private long id;
+
     private String title;
 
     private int year;
@@ -44,6 +46,10 @@ public class Alarm extends LitePalSupport implements Serializable {
     private String ringName;
 
     private boolean isOpen;
+
+    public long getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;

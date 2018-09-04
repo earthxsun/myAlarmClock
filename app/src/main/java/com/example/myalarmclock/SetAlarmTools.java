@@ -78,7 +78,7 @@ public class SetAlarmTools {
                     public void onClick(DialogInterface dialog, int which) {
                         String alarmDate = datePicker.getYear() + "年" + (datePicker.getMonth() + 1) + "月" + datePicker.getDayOfMonth() + "日";
                         mAlarm.setYear(datePicker.getYear());
-                        mAlarm.setMonth(datePicker.getMonth());
+                        mAlarm.setMonth(datePicker.getMonth() + 1);
                         mAlarm.setDay(datePicker.getDayOfMonth());
                         mSetAlarmItems.get(mPosition).setContent(alarmDate);
                         mSetAlarmAdapter.notifyDataSetChanged();
@@ -97,7 +97,7 @@ public class SetAlarmTools {
 
     //设置闹钟重复响铃
     public void setAlarmRepeat() {
-//        final String[] items = new String[]{"单次", "周一到周五", "法定工作日", "每天", "自定义"};
+
         //设置标题样式
         TextView title = new TextView(mContext);
         title.setText("重复");
@@ -184,11 +184,11 @@ public class SetAlarmTools {
                     }
                 }
                 String alarmRepeat = stringBuilder.toString();
-                if(alarmRepeat.equals("周一 周二 周三 周四 周五 ")){
+                if (alarmRepeat.equals("周一 周二 周三 周四 周五 ")) {
                     alarmRepeat = "周一到周五";
                 }
 
-                if(alarmRepeat.equals("周日 周一 周二 周三 周四 周五 周六 ")){
+                if (alarmRepeat.equals("周日 周一 周二 周三 周四 周五 周六 ")) {
                     alarmRepeat = "每天";
                 }
                 mAlarm.setSunday(isSelected[0]);
@@ -211,7 +211,7 @@ public class SetAlarmTools {
         });
         return builder;
     }
-
+    //调用系统铃声选择界面
     public void setRingtone() {
         mActivity = (AppCompatActivity) mContext;
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);

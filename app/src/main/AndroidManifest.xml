@@ -17,9 +17,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SetAlarmActivity"
-            android:theme="@style/AppThemeNoActionbar">
-        </activity>
+        <activity
+            android:name=".SetAlarmActivity"
+            android:theme="@style/AppThemeNoActionbar" />
+        <activity android:name=".AlarmAlertActivity" />
+
+        <receiver
+            android:name=".AlarmAlertReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

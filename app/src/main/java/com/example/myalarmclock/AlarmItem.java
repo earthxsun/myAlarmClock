@@ -2,6 +2,8 @@ package com.example.myalarmclock;
 
 public class AlarmItem {
 
+    private long alarmId;
+
     private String alarmName;
 
     private String alarmtime;
@@ -12,12 +14,17 @@ public class AlarmItem {
 
     private Boolean open;
 
-    public AlarmItem(String name, String time, String date, String repeat, boolean open) {
+    public AlarmItem(long id, String name, String time, String date, String repeat, boolean open) {
+        this.alarmId = id;
         this.alarmName = name;
         this.alarmtime = time;
         this.alarmdate = date;
         this.alarmRepeat = repeat;
         this.open = open;
+    }
+
+    public long getAlarmId() {
+        return alarmId;
     }
 
     public String getAlarmName() {

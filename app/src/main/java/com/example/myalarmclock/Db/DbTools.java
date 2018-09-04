@@ -1,5 +1,7 @@
 package com.example.myalarmclock.Db;
 
+import android.content.ContentValues;
+
 import org.litepal.LitePal;
 
 import java.util.List;
@@ -26,5 +28,20 @@ public class DbTools {
 //            Log.d("mytest", "Alarm周日:" + mAlarm.isSunday());
 //        }
         return alarmList;
+    }
+
+    public static void updateAlarmRepeat(Alarm alarm){
+        ContentValues values = new ContentValues();
+        values.put("everyday",alarm.isEveryday());
+        values.put("once",alarm.isOnce());
+        values.put("statutoryholiday",alarm.isStatutoryholiday());
+        values.put("monday",alarm.isMonday());
+        values.put("tuesday",alarm.isTuesday());
+        values.put("wednesday",alarm.isWednesday());
+        values.put("thursday",alarm.isThursday());
+        values.put("friday",alarm.isFriday());
+        values.put("saturday",alarm.isSaturday());
+        values.put("sunday",alarm.isSunday());
+        LitePal.update(Alarm.class,values,alarm.getId());
     }
 }
