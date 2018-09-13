@@ -2,11 +2,14 @@ package com.example.myalarmclock.Db;
 
 import android.content.ContentValues;
 
+import com.example.myalarmclock.InitData;
+
 import org.litepal.LitePal;
 
 import java.util.List;
 
 public class DbTools {
+//    public static MediaPlayer mMediaPlayer = new MediaPlayer();
 
     public static List<Alarm> queryData(){
         List<Alarm> alarmList = LitePal.findAll(Alarm.class);
@@ -28,6 +31,22 @@ public class DbTools {
 //            Log.d("mytest", "Alarm周日:" + mAlarm.isSunday());
 //        }
         return alarmList;
+    }
+
+    //闹钟响铃后更新status和isOpen的状态
+    public static void updateAlarmStatus(final int id){
+        Alarm alarm = LitePal.find(Alarm.class,id);
+        ContentValues values = new ContentValues();
+
+        if (alarm.isOnce()){
+            values.put("status", InitData.DISMISS);
+            values.put("isOpen",false);
+            LitePal.update(Alarm.class,values,id);
+        }
+
+        InitData.mAlarmItemList.clear();
+        InitData.initAlarmItem();
+        InitData.mAlarmlistAdapter.notifyDataSetChanged();
     }
 
     public static void updateAlarmRepeat(Alarm alarm){

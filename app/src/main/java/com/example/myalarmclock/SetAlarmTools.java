@@ -143,6 +143,9 @@ public class SetAlarmTools {
                         alertDialog.show();
                         break;
                     default:
+                        mAlarm.setOnce(true);
+                        mSetAlarmItems.get(mPosition).setContent(InitData.items[which]);
+                        mSetAlarmAdapter.notifyDataSetChanged();
                         break;
                 }
             }

@@ -1,15 +1,22 @@
 package com.example.myalarmclock;
 
 import com.example.myalarmclock.Db.Alarm;
+import com.example.myalarmclock.Db.AlarmlistAdapter;
 import com.example.myalarmclock.Db.DbTools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InitData {
 
     public static final String[] items = new String[]{"单次", "周一到周五", "法定工作日", "每天", "自定义"};
 
-    public static AlarmManagerHelper sAlarmManagerHelper;
+    public static final int DISMISS = 0;
+    public static final int NORMAL = 1;
+
+    public static AlarmlistAdapter mAlarmlistAdapter;
+
+    public static List<AlarmItem> mAlarmItemList = new ArrayList<>();
 
     static final String itemName1 = "闹钟标题";
     static final String itemName2 = "响铃日期";
@@ -17,13 +24,15 @@ public class InitData {
     static final String itemName4 = "铃声设置";
 
     //初始化闹钟项数据
-    public static void initAlarmItem(List<AlarmItem> alarmItems) {
+    public static void initAlarmItem() {
         List<Alarm> alarmList = DbTools.queryData();
         String alarmRepeat;
         String time;
         String date;
         String name;
         long alarmId;
+
+        mAlarmItemList.clear();
 
         for (int i = 0; i < alarmList.size(); i++) {
             Alarm alarm = alarmList.get(i);
@@ -84,19 +93,18 @@ public class InitData {
                 alarmRepeat = InitData.items[3];
             }
 
-            alarmItems.add(new AlarmItem(alarmId,name, time, date, alarmRepeat, alarm.isOpen()));
+            mAlarmItemList.add(new AlarmItem(alarmId, name, time, date, alarmRepeat, alarm.isOpen()));
         }
     }
 
-
     //初始化闹钟设置项数据
-    public static void initSetAlarmItems(Alarm mAlarm,List<SetAlarmItem> mSetAlarmItems,boolean is_new_alarm){
+    public static void initSetAlarmItems(Alarm mAlarm, List<SetAlarmItem> mSetAlarmItems, boolean is_new_alarm) {
         SetAlarmItem item1;
         SetAlarmItem item2;
         SetAlarmItem item3;
         SetAlarmItem item4;
 
-        if (is_new_alarm){
+        if (is_new_alarm) {
             String ringDate = mAlarm.getYear() + "年" + mAlarm.getMonth() + "月" + mAlarm.getDay() + "日";
             item1 = new SetAlarmItem(itemName1, mAlarm.getTitle(), R.drawable.arrow_right_gray);
             item2 = new SetAlarmItem(itemName2, ringDate, R.drawable.arrow_right_gray);
@@ -167,7 +175,7 @@ public class InitData {
         mSetAlarmItems.add(item4);
     }
 
-    public static void ClearAlarmRepeat(Alarm alarm){
+    public static void ClearAlarmRepeat(Alarm alarm) {
         alarm.setEveryday(false);
         alarm.setMonday(false);
         alarm.setTuesday(false);
@@ -180,7 +188,7 @@ public class InitData {
         alarm.setOnce(false);
     }
 
-    public static Alarm SaveAlarmRepeat(Alarm alarm){
+    public static Alarm SaveAlarmRepeat(Alarm alarm) {
         Alarm alarmSave = alarm;
         return alarmSave;
     }

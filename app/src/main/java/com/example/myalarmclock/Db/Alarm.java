@@ -1,5 +1,9 @@
 package com.example.myalarmclock.Db;
 
+import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
+
 import org.litepal.crud.LitePalSupport;
 
 import java.io.Serializable;
@@ -46,6 +50,8 @@ public class Alarm extends LitePalSupport implements Serializable {
     private String ringName;
 
     private boolean isOpen;
+
+    private int status;
 
     public long getId() {
         return id;
@@ -203,11 +209,22 @@ public class Alarm extends LitePalSupport implements Serializable {
         isOpen = open;
     }
 
-    public static Alarm getAlarminstance(){
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public static Alarm getAlarminstance(Context context){
+        Uri uri = RingtoneManager.getActualDefaultRingtoneUri(context,RingtoneManager.TYPE_ALARM);
         Calendar mCalendar = Calendar.getInstance();
         Alarm alarm = new Alarm();
         alarm.setTitle("自定义");
-        alarm.setRingName("自定义");
+        alarm.setRingName("默认铃声");
+        alarm.setOnce(true);
+        alarm.setRingUri(uri.toString());
         alarm.setYear(mCalendar.get(Calendar.YEAR));
         alarm.setMonth(mCalendar.get(Calendar.MONTH) + 1);
         alarm.setDay(mCalendar.get(Calendar.DAY_OF_MONTH));

@@ -1,7 +1,6 @@
 package com.example.myalarmclock;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -27,12 +26,10 @@ import java.util.List;
 public class SetAlarmActivity extends AppCompatActivity {
 
     private List<SetAlarmItem> mSetAlarmItems = new ArrayList<>();
-    private MediaPlayer mMediaPlayer = new MediaPlayer();
     private SetAlarmAdapter alarmAdapter;
     private TimePicker mTimePicker;
     private Alarm mAlarm;
     private Alarm alarmTemp;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,18 +87,23 @@ public class SetAlarmActivity extends AppCompatActivity {
                         mAlarm.setHour(mTimePicker.getHour());
                         mAlarm.setMinute(mTimePicker.getMinute());
                         mAlarm.setOpen(true);
+                        mAlarm.setStatus(InitData.NORMAL);
                         mAlarm.save();
                         Intent intent1 = new Intent();
+                        intent1.putExtra("alarm_id",mAlarm.getId());
                         setResult(RESULT_OK,intent1);
                         finish();
                     } else {
                         //更新时间
                         mAlarm.setHour(mTimePicker.getHour());
                         mAlarm.setMinute(mTimePicker.getMinute());
+                        mAlarm.setOpen(true);
+                        mAlarm.setStatus(InitData.NORMAL);
                         mAlarm.update(mAlarm.getId());
                         //更新闹钟重复项
                         DbTools.updateAlarmRepeat(mAlarm);
                         Intent intent1 = new Intent();
+                        intent1.putExtra("alarm_id",mAlarm.getId());
                         setResult(RESULT_OK,intent1);
                         finish();
                     }
@@ -125,8 +127,11 @@ public class SetAlarmActivity extends AppCompatActivity {
         //把选中的铃声更新到界面
         if (resultCode == RESULT_OK && requestCode == 1) {
             Uri uri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+//            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(this,RingtoneManager.TYPE_RINGTONE);
             Ringtone ringTitle = RingtoneManager.getRingtone(SetAlarmActivity.this, uri);
             String ringName = ringTitle.getTitle(SetAlarmActivity.this);
+            Log.d("mytest","铃声名字："+ringName);
+            Log.d("mytest","铃声uri:"+uri);
             mSetAlarmItems.get(3).setContent(ringName);
             mAlarm.setRingName(ringName);
             mAlarm.setRingUri(uri.toString());
@@ -139,10 +144,6 @@ public class SetAlarmActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-        }
     }
 
     @Override
